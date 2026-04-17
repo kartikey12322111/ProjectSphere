@@ -1,5 +1,7 @@
 # ProjectSphere
 
+ProjectSphere – A MERN Stack based Final Year Project Management System for managing projects, teams, tasks, and progress.
+
 ProjectSphere is a comprehensive academic project management platform designed to streamline the project lifecycle for students, teachers, and administrators. It facilitates collaboration, project tracking, and communication within an academic environment.
 
 ## Features
@@ -36,8 +38,8 @@ ProjectSphere is a comprehensive academic project management platform designed t
 
 1. **Clone the repository**
    ```bash
-   git clone <your-repository-url>
-   cd ProjectSphere-main
+   git clone https://github.com/kartikey12322111/ProjectSphere.git
+   cd ProjectSphere
    ```
 
 2. **Backend Setup**
@@ -59,3 +61,4 @@ ProjectSphere is a comprehensive academic project management platform designed t
 ## License
 
 This project is licensed under the MIT License.
+
