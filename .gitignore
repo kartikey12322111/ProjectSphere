@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Environment Variables
+.env
+.env.local
+.env.development
+.env.production
+client/.env
+server/.env
+
+# Build Artifacts
+client/dist/
+server/dist/
+build/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Server Specific
+server/uploads/*
+!server/uploads/.gitkeep
+server/temp/*
+!server/temp/.gitkeep
+
+# Temporary Files
+client/lint_output.txt
+*.tmp
