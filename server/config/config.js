@@ -14,7 +14,7 @@ dotenvConfig({ path: path.join(__dirname, "../.env") });
  * Manages all environment variables and provides defaults where safe.
  */
 const _config = {
-    PORT: process.env.PORT || 4000,
+    PORT: parseInt(process.env.PORT, 10) || 4000,
     MONGO_URI: process.env.MONGO_URI,
     JWT_SECRET: process.env.JWT_SECRET,
     JWT_EXPIRE: process.env.JWT_EXPIRE || "7d",
@@ -32,10 +32,20 @@ const _config = {
 
 // Simple validation to ensure critical variables are present
 const requiredConfig = ["MONGO_URI", "JWT_SECRET"];
-for (const key of requiredConfig) {
-    if (!_config[key]) {
-        console.warn(`WARNING: Missing required configuration for ${key}. Check your .env file.`);
+const missingConfig = requiredConfig.filter(key => !_config[key]);
+
+if (missingConfig.length > 0) {
+    if (_config.NODE_ENV === "production") {
+        console.error(`FATAL ERROR: Missing required configuration: ${missingConfig.join(", ")}`);
+        process.exit(1);
+    } else {
+        console.warn(`WARNING: Missing configuration for: ${missingConfig.join(", ")}. Check your .env file.`);
     }
 }
 
-export const config = Object.freeze(_config);
+export const config = Object.freeze({
+    ..._config,
+    isProduction: _config.NODE_ENV === "production",
+    isDevelopment: _config.NODE_ENV === "development"
+});
+

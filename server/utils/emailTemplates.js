@@ -1,0 +1,81 @@
+export function generateForgotPasswordEmailTemplate(resetPasswordUrl){
+    return `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px; background-color: #ffffff; color: #1f2937;">
+    <!--Header-->
+    <div style="text-align: center; margin-bottom: 20px;">
+        <h2 style="color: #3b82f6; margin: 0;">Reset Your Password</h2>
+        <p style="font-size: 14px; color: #6b7280; margin: 5px 0 0 0;">Secure access to your learning journey</p>
+    </div>
+    <!--Body-->
+    <p style="font-size: 16px; color: #374151;">Dear User,</p>
+    <p style="font-size: 16px; color: #374151;">We received a request to reset your password for your ProjectSphere account. Click the button below to set a new password:</p>
+
+    <!--Button-->
+    <div style="text-align: center; margin: 30px 0;">
+    <a href="${resetPasswordUrl}" style="display: inline-block; background-color: #3b82f6; color: #ffffff; text-decoration: none; border-radius: 4px; font-size: 16px; padding: 10px 20px;">Reset Password</a>
+    </div>
+    <p style="font-size: 15px; color: #374151;">If you did not request this, please ignore this email. This link will expire in <b>10 minutes</b>.</p>
+    <p style="font-size: 15px; color: #374151;">
+    If the button above does not work, copy and paste the following URL into your web browser:
+    </p>
+
+    <!--Link-->
+    <p style="font-size: 14px; color: #3b82f6; word-break: break-all;">${resetPasswordUrl}</p>
+
+    <!--Footer-->
+    <footer style="margin-top: 30px; text-align: center; font-size: 12px; color: #6b7280;">
+       <p>Thank you,<br><strong>ProjectSphere Team</strong></p>
+       <p style="font-size: 12px; color: #9ca3af;">This is an automated message. Please do not reply to this email.</p>
+    </footer>
+    </div>
+    `;
+}
+
+
+/**
+ * Request Accepted Email
+ */
+export function generateRequestAcceptedTemplate(supervisorName) {
+  return `
+    <div style="font-family: Arial; padding:20px; background:#fff; border:1px solid #ddd; border-radius:8px;">
+      <h2 style="color:#10b981;">✅ Supervisor Request Accepted</h2>
+      <p>Your supervisor request has been accepted by <strong>${supervisorName}</strong>.</p>
+      <p>You can now start working on your project and upload files.</p>
+    </div>
+  `;
+}
+
+/**
+ * Request Rejected Email
+ */
+export function generateRequestRejectedTemplate(supervisorName) {
+  return `
+    <div style="font-family: Arial; padding:20px; background:#fff; border:1px solid #ddd; border-radius:8px;">
+      <h2 style="color:#ef4444;">❌ Supervisor Request Rejected</h2>
+      <p>Your supervisor request has been rejected by <strong>${supervisorName}</strong>.</p>
+      <p>You can try requesting another supervisor.</p>
+    </div>
+  `;
+}
+
+export function generateRequestSentTemplate(studentName, projectTitle) {
+  return `
+    <div style="font-family: Arial; padding:20px; background:#fff; border:1px solid #ddd; border-radius:8px;">
+      <h2 style="color:#3b82f6;">📩 New Supervisor Request</h2>
+      <p>Student <strong>${studentName}</strong> has sent you a supervisor request for the project:</p>
+      <p><strong>${projectTitle}</strong></p>
+      <p>Please log in to your dashboard to review it.</p>
+    </div>
+  `;
+}
+
+export function generateFeedbackGivenTemplate(supervisorName, feedbackTitle) {
+  return `
+    <div style="font-family: Arial; padding:20px; background:#fff; border:1px solid #ddd; border-radius:8px;">
+      <h2 style="color:#8b5cf6;">💬 New Feedback Received</h2>
+      <p>Your supervisor <strong>${supervisorName}</strong> has left new feedback titled:</p>
+      <p><strong>${feedbackTitle}</strong></p>
+      <p>Log in to view the details.</p>
+    </div>
+  `;
+}
