@@ -1,6 +1,6 @@
 import express from 'express'
 import multer from 'multer'
-import { isAuthenticated, isAuthorized } from '../middlewares/authMiddleware.js';
+import { isAuthenticated, isAuthorized } from '../middlewares/auth.js';
 import { downloadFile, getAvailableSupervisors, getDashboardStats, getFeedback, getStudentProject, getSupervisor, requestSupervisor, submitProposal, uploadFiles, searchStudents } from '../controllers/studentController.js';
 import { handleUploadError, upload } from '../middlewares/upload.js';
 

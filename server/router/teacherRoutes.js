@@ -1,5 +1,5 @@
 import express from 'express'
-import { isAuthenticated, isAuthorized } from '../middlewares/authMiddleware.js';
+import { isAuthenticated, isAuthorized } from '../middlewares/auth.js';
 import { acceptRequest, addFeedback, getFeedback, downloadFile, getAssignedStudents, getFiles, getRequests, getTeacherDashboardStats, markComplete, rejectRequest } from '../controllers/teacherController.js';
 
 const router = express.Router();

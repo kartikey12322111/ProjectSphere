@@ -1,5 +1,5 @@
 import express from 'express';
-import { isAuthenticated, isAuthorized } from '../middlewares/authMiddleware.js';
+import { isAuthenticated, isAuthorized } from '../middlewares/auth.js';
 import { downloadFile, getProject, updateGroupName } from '../controllers/projectController.js';
 
 const router = express.Router();

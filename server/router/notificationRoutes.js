@@ -1,6 +1,6 @@
 import express from 'express'
 
-import { isAuthenticated, isAuthorized } from '../middlewares/authMiddleware.js';
+import { isAuthenticated, isAuthorized } from '../middlewares/auth.js';
 import { deleteNotification, getNotifications, markAllAsRead, markAsRead } from '../controllers/notificationController.js';
 
 

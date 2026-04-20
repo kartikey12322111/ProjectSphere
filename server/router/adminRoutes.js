@@ -1,5 +1,5 @@
 import express from 'express'
-import { isAuthenticated, isAuthorized } from '../middlewares/authMiddleware.js';
+import { isAuthenticated, isAuthorized } from '../middlewares/auth.js';
 import { approveProject, rejectProject, assignSupervisor, createStudent, createTeacher, deleteStudent, deleteTeacher, getAllProjects, getAllUsers, getDashboardStats, updateStudent, updateTeacher, getAdminSupervisorRequests } from '../controllers/adminController.js';
 
 

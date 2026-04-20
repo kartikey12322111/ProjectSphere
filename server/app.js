@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
+import { rateLimit } from 'express-rate-limit';
 import { config } from "./config/config.js";
 import { errorMiddleware } from './middlewares/error.js';
 import authRouter from "./router/userRoutes.js";
@@ -27,6 +28,16 @@ const app = express();
 if (config.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
+
+// Rate Limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per window
+  message: "Too many requests from this IP, please try again after 15 minutes",
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+app.use(limiter);
 
 const allowedOrigins = [
   "http://localhost:5173",
