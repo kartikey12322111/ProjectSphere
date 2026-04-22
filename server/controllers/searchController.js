@@ -18,10 +18,9 @@ export const globalSearch = asyncHandler(async (req, res, next) => {
       $or: [
         { name: searchRegex },
         { department: searchRegex },
-        { expertise: searchRegex },
-        { experties: searchRegex }
+        { expertise: searchRegex }
       ]
-    }).select("name role department expertise experties"),
+    }).select("name role department expertise"),
     
     Project.find({
       $or: [

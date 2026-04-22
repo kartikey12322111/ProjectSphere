@@ -24,7 +24,7 @@ const ProfilePage = () => {
     name: "",
     email: "",
     department: "",
-    experties: "",
+    expertise: "",
     bio: "",
     portfolioUrl: "",
   });
@@ -37,7 +37,7 @@ const ProfilePage = () => {
       authUser.department,
       authUser.bio,
       authUser.portfolioUrl,
-      authUser.role === "Teacher" ? (authUser.experties?.length > 0) : true,
+      authUser.role === "Teacher" ? (authUser.expertise?.length > 0) : true,
     ];
     const filled = fields.filter(Boolean).length;
     return Math.round((filled / fields.length) * 100);
@@ -49,7 +49,7 @@ const ProfilePage = () => {
         name: authUser.name || "",
         email: authUser.email || "",
         department: authUser.department || "",
-        experties: Array.isArray(authUser.experties) ? authUser.experties.join(", ") : authUser.experties || "",
+        expertise: Array.isArray(authUser.expertise) ? authUser.expertise.join(", ") : authUser.expertise || "",
         bio: authUser.bio || "",
         portfolioUrl: authUser.portfolioUrl || "",
       });
@@ -183,8 +183,8 @@ const ProfilePage = () => {
                     <Briefcase className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors" size={18} />
                     <input
                       type="text"
-                      name="experties"
-                      value={formData.experties}
+                      name="expertise"
+                      value={formData.expertise}
                       onChange={handleChange}
                       disabled={!isEditing}
                       className="w-full pl-12 pr-4 py-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border-2 border-transparent focus:border-blue-600 focus:bg-white dark:focus:bg-slate-800 transition-all outline-none text-body-bold disabled:opacity-70"

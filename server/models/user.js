@@ -37,7 +37,7 @@ const userSchema = new mongoose.Schema({
         trim: true,
         default: null,
     },
-    experties: {
+    expertise: {
         type: [String],
         default: [],
     },
@@ -108,4 +108,4 @@ userSchema.methods.getResetPasswordToken = function (){
     this.resetPasswordExpire = Date.now() + 15*60*1000;
     return resetToken;
 }
-export const User = mongoose.model("User",userSchema);
+export const User = mongoose.models.User || mongoose.model("User", userSchema);

@@ -55,8 +55,8 @@ export const deleteStudent = asyncHandler(async(req, res, next)=>{
 });
 
 export const createTeacher = asyncHandler(async (req, res, next) =>{
-    const {name , email , password,department, maxStudents, experties } = req.body;
-    if(!name || !email || !password || !department || !maxStudents || !experties){
+    const {name , email , password,department, maxStudents, expertise } = req.body;
+    if(!name || !email || !password || !department || !maxStudents || !expertise){
         return next(new ErrorHandler("Please provide all required fields", 400));
     }
     const user = await userServices.createUser({
@@ -65,10 +65,10 @@ export const createTeacher = asyncHandler(async (req, res, next) =>{
         password, 
         department, 
         maxStudents, 
-        experties: Array.isArray(experties) 
-        ? experties 
-        : typeof experties === "string" && experties.trim()!== "" 
-        ? experties.split(",").map(s=> s.trim())
+        expertise: Array.isArray(expertise) 
+        ? expertise 
+        : typeof expertise === "string" && expertise.trim()!== "" 
+        ? expertise.split(",").map(s=> s.trim())
         : [],
         role: "Teacher",
     });

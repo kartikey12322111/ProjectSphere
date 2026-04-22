@@ -13,7 +13,7 @@ const AddTeacher = () => {
     email: "",
     department: "",
     password: "",
-    experties: "",
+    expertise: "",
     maxStudents: 1,
   });
 
@@ -35,7 +35,7 @@ const AddTeacher = () => {
         email: "",
         department: "",
         password: "",
-        experties: "",
+        expertise: "",
         maxStudents: 1,
       });
 
@@ -161,8 +161,8 @@ const AddTeacher = () => {
               <select
                 className="w-full appearance-none rounded-2xl border border-slate-200 bg-white py-2.5 pl-10 pr-10 text-sm text-slate-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                 required
-                value={formData.experties}
-                onChange={(e) => setFormData({ ...formData, experties: e.target.value })}
+                value={formData.expertise}
+                onChange={(e) => setFormData({ ...formData, expertise: e.target.value })}
               >
                 <option value="">Select Expertise</option>
                 <option value="Artificial Intelligence">Artificial Intelligence</option>

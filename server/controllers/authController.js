@@ -135,7 +135,7 @@ export const resetPassword = asyncHandler(async (req, res, next)=> {
 });
 
 export const updateProfile = asyncHandler(async (req, res, next) => {
-    const { name, email, department, experties, bio, portfolioUrl } = req.body;
+    const { name, email, department, expertise, bio, portfolioUrl } = req.body;
     const user = await User.findById(req.user._id);
 
     if (!user) {
@@ -147,8 +147,8 @@ export const updateProfile = asyncHandler(async (req, res, next) => {
     if (department !== undefined) user.department = department;
     if (bio !== undefined) user.bio = bio;
     if (portfolioUrl !== undefined) user.portfolioUrl = portfolioUrl;
-    if (experties !== undefined && experties !== null) {
-        user.experties = Array.isArray(experties) ? experties : experties.toString().split(",").map(s => s.trim());
+    if (expertise !== undefined && expertise !== null) {
+        user.expertise = Array.isArray(expertise) ? expertise : expertise.toString().split(",").map(s => s.trim());
     }
 
     await user.save();

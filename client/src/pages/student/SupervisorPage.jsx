@@ -131,14 +131,14 @@ const SupervisorPage = () => {
                   <div>
                     <p className="text-tiny uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold">Expertise</p>
                     <div className="mt-1 flex flex-wrap gap-1">
-                      {Array.isArray(supervisor?.experties) ? (
-                        supervisor.experties.slice(0, 2).map((exp, idx) => (
+                      {Array.isArray(supervisor?.expertise) ? (
+                        supervisor.expertise.slice(0, 2).map((exp, idx) => (
                           <span key={idx} className="inline-flex items-center rounded-full bg-blue-100 px-2 py-0.5 text-tiny font-bold text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 uppercase">
                             {exp}
                           </span>
                         ))
                       ) : (
-                        <span className="text-sm text-slate-600 dark:text-slate-400">{supervisor?.experties || "-"}</span>
+                        <span className="text-sm text-slate-600 dark:text-slate-400">{supervisor?.expertise || "-"}</span>
                       )}
                     </div>
                   </div>
@@ -255,7 +255,7 @@ const SupervisorPage = () => {
 
                   <div className="mb-4 space-y-2">
                     <div className="flex flex-wrap gap-1">
-                      {sup.experties && Array.isArray(sup.experties) && sup.experties.slice(0, 2).map((exp, idx) => (
+                      {sup.expertise && Array.isArray(sup.expertise) && sup.expertise.slice(0, 2).map((exp, idx) => (
                         <span key={idx} className="inline-flex rounded-full bg-blue-100 px-2 py-0.5 text-tiny font-bold text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 uppercase">
                           {exp}
                         </span>

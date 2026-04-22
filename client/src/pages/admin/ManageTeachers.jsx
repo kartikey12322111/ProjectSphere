@@ -21,7 +21,7 @@ const ManageTeachers = () => {
     name: "",
     email: "",
     department: "Computer Science",
-    experties: "Artificial Intelligence",
+    expertise: "Artificial Intelligence",
     maxStudents: 10,
   });
 
@@ -72,7 +72,7 @@ const ManageTeachers = () => {
       name: "",
       email: "",
       department: "",
-      experties: "",
+      expertise: "",
       maxStudents: 10,
     });
   };
@@ -91,9 +91,9 @@ const ManageTeachers = () => {
       name: teacher.name,
       email: teacher.email,
       department: teacher.department,
-      experties: Array.isArray(teacher.experties)
-        ? teacher.experties[0]
-        : teacher.experties,
+      expertise: Array.isArray(teacher.expertise)
+        ? teacher.expertise[0]
+        : teacher.expertise,
       maxStudents: typeof teacher.maxStudents === "number" ? teacher.maxStudents : 10,
     });
     setShowModal(true);
@@ -311,8 +311,8 @@ const ManageTeachers = () => {
                       </td>
                       <td className="px-4 py-4">
                         <div className="flex flex-wrap gap-1">
-                          {Array.isArray(teacher.experties) ? (
-                            teacher.experties.slice(0, 2).map((exp, idx) => (
+                          {Array.isArray(teacher.expertise) ? (
+                            teacher.expertise.slice(0, 2).map((exp, idx) => (
                               <span
                                 key={idx}
                                 className="inline-flex items-center rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
@@ -322,12 +322,12 @@ const ManageTeachers = () => {
                             ))
                           ) : (
                             <span className="inline-flex items-center rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900/30 dark:text-blue-400">
-                              {teacher.experties}
+                              {teacher.expertise}
                             </span>
                           )}
-                          {Array.isArray(teacher.experties) && teacher.experties.length > 2 && (
+                          {Array.isArray(teacher.expertise) && teacher.expertise.length > 2 && (
                             <span className="text-xs text-slate-500">
-                              +{teacher.experties.length - 2}
+                              +{teacher.expertise.length - 2}
                             </span>
                           )}
                         </div>
@@ -457,8 +457,8 @@ const ManageTeachers = () => {
                 <select
                   className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-800 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                   required
-                  value={formData.experties}
-                  onChange={(e) => setFormData({ ...formData, experties: e.target.value })}
+                  value={formData.expertise}
+                  onChange={(e) => setFormData({ ...formData, expertise: e.target.value })}
                 >
                   <option value="Artificial Intelligence">Artificial Intelligence</option>
                   <option value="Machine Learning">Machine Learning</option>

@@ -116,7 +116,7 @@ export const uploadFiles = asyncHandler(async(req, res, next)=>{
 
 export const getAvailableSupervisors = asyncHandler(async(req, res, next)=>{
     const supervisors = await User.find({role: "Teacher"})
-    .select("name email department experties")
+    .select("name email department expertise")
     .lean();
     res.status(200).json({
         success: true,
@@ -129,7 +129,7 @@ export const getSupervisor = asyncHandler(async(req, res, next) => {
     const studentId = req.user._id;
     const student = await User.findById(studentId).populate(
         "supervisor",
-        "name email department experties"
+        "name email department expertise"
     );
     if(!student.supervisor){
         return res.status(200).json({
