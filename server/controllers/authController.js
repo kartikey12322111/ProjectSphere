@@ -1,5 +1,6 @@
 import asyncHandler  from "../middlewares/asyncHandler.js";
-import ErrorHandler from "../middlewares/error.js";
+import { ApiError } from "../utils/ApiError.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
 import { User } from "../models/user.js";
 import { generateForgotPasswordEmailTemplate } from "../utils/emailTemplates.js";
 import { generateToken } from "../utils/generateToken.js";
@@ -9,11 +10,11 @@ import { sendEmail } from "../services/emailService.js";
 export const registerUser = asyncHandler(async (req, res,next) => {
     const {name, email, password, role} = req.body;
     if(!name || !email || !password){
-        return next(new ErrorHandler("Please provide all required fields",400));
+        return next(new ApiError(400, "Please provide all required fields"));
     }
     let  user = await User.findOne({ email });
     if(user){
-        return next(new ErrorHandler("User already exists",400));
+        return next(new ApiError(400, "User already exists"));
     }
     user = new User({ name, email , password, role});
     await user.save();
@@ -25,18 +26,18 @@ export const login = asyncHandler(async (req, res, next)=> {
     console.log(`Login attempt: email=${email}, role=${role}`);
     
     if(!email || !password || !role) {
-        return next(new ErrorHandler("Please provide all required fields",400));
+        return next(new ApiError(400, "Please provide all required fields"));
     }
     const user = await User.findOne({email, role}).select("+password");
     if(!user){
         console.log(`User not found with email=${email} and role=${role}`);
-        return next(new ErrorHandler("Invalid credentials",401));   
+        return next(new ApiError(401, "Invalid credentials"));   
     }
     const isPasswordMatched = await user.comparePassword(password);
     console.log(`Password match result: ${isPasswordMatched}`);
     
     if(!isPasswordMatched){
-        return next(new ErrorHandler("Invalid credentials",401));   
+        return next(new ApiError(401, "Invalid credentials"));   
     }
     generateToken(user, 200, "Logged in successfully",res);
 });
@@ -52,21 +53,13 @@ export const logout = asyncHandler(async (req, res, next)=> {
 });
 export const getUser = asyncHandler(async (req, res, next)=> {
     const user = req.user;
-    res.status(200).json({
-        success: true,  
-        user,
-    });
+    res.status(200).json(new ApiResponse(200, user, "User profile fetched successfully"));
 });
 
 export const forgotPassword = asyncHandler(async (req, res, next)=> {
     const user = await User.findOne({email: req.body.email});
     if(!user){
-        const err = new ErrorHandler("User not found with this email", 404);
-        if (typeof next === "function") return next(err);
-        return res.status(err.statusCode).json({
-            success: false,
-            message: err.message,
-        });
+        return next(new ApiError(404, "User not found with this email"));
     }
     const resetToken = user.getResetPasswordToken();
     await user.save({ validateBeforeSave: false });
@@ -79,20 +72,12 @@ export const forgotPassword = asyncHandler(async (req, res, next)=> {
             subject: "Project Sphere- Password Reset Request",
             message,
         });
-        res.status(200).json({
-            success: true,
-            message: `Email sent to ${user.email} successfully`,
-        })
+        res.status(200).json(new ApiResponse(200, null, `Email sent to ${user.email} successfully`));
     } catch (error) {
         user.resetPasswordToken = undefined;
         user.resetPasswordExpire = undefined;
         await user.save({ validateBeforeSave: false});
-        const err = new ErrorHandler(error.message || "Cannot send email", 500);
-        if (typeof next === "function") return next(err);
-        return res.status(err.statusCode).json({
-            success: false,
-            message: err.message,
-        });
+        return next(new ApiError(500, error.message || "Cannot send email"));
     }
 });
 export const resetPassword = asyncHandler(async (req, res, next)=> {
@@ -103,28 +88,13 @@ export const resetPassword = asyncHandler(async (req, res, next)=> {
         resetPasswordExpire: { $gt: Date.now() },
     });
     if(!user){
-        const err = new ErrorHandler("Invalid or expired reset token", 400);
-        if (typeof next === "function") return next(err);
-        return res.status(err.statusCode).json({
-            success: false,
-            message: err.message,
-        });
+        return next(new ApiError(400, "Invalid or expired reset token"));
     }
     if(!req.body.password || !req.body.confirmPassword){
-        const err = new ErrorHandler("Please provide both password and confirm password", 400);
-        if (typeof next === "function") return next(err);
-        return res.status(err.statusCode).json({
-            success: false,
-            message: err.message,
-        });
+        return next(new ApiError(400, "Please provide both password and confirm password"));
     }
     if(req.body.password !== req.body.confirmPassword){
-        const err = new ErrorHandler("Passwords do not match", 400);
-        if (typeof next === "function") return next(err);
-        return res.status(err.statusCode).json({
-            success: false,
-            message: err.message,
-        });
+        return next(new ApiError(400, "Passwords do not match"));
     }
 
     user.password = req.body.password;
@@ -139,7 +109,7 @@ export const updateProfile = asyncHandler(async (req, res, next) => {
     const user = await User.findById(req.user._id);
 
     if (!user) {
-        return next(new ErrorHandler("User not found", 404));
+        return next(new ApiError(404, "User not found"));
     }
 
     if (name) user.name = name;
@@ -153,9 +123,5 @@ export const updateProfile = asyncHandler(async (req, res, next) => {
 
     await user.save();
 
-    res.status(200).json({
-        success: true,
-        message: "Profile updated successfully",
-        user,
-    });
+    res.status(200).json(new ApiResponse(200, user, "Profile updated successfully"));
 });

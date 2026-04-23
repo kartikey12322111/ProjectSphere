@@ -5,7 +5,7 @@ import cookieParser from 'cookie-parser';
 import { rateLimit } from 'express-rate-limit';
 import { config } from "./config/config.js";
 import { errorMiddleware } from './middlewares/error.js';
-import authRouter from "./router/userRoutes.js";
+import authRouter from "./router/authRoutes.js";
 import adminRouter from "./router/adminRoutes.js";
 import studentRouter from "./router/studentRoutes.js";
 import notificationRouter from "./router/notificationRoutes.js";
