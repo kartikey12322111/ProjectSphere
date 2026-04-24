@@ -2,7 +2,7 @@ import * as projectService from "../services/projectService.js";
 import * as fileServices from "../services/fileServices.js";
 
 import asyncHandler from "../middlewares/asyncHandler.js"
-import ErrorHandler from "../middlewares/error.js";
+import { ErrorHandler } from "../middlewares/error.js";
 
 
 export const downloadFile = asyncHandler(async(req, res, next) =>{

@@ -1,5 +1,8 @@
 import { ApiError } from "../utils/ApiError.js";
 
+// Alias ApiError as ErrorHandler for consistency with other files
+export const ErrorHandler = ApiError;
+
 /**
  * Global Error Handling Middleware
  * Catch-all for all errors in the application. Standardizes the error response.
@@ -43,3 +46,4 @@ export const errorMiddleware = (err, req, res, next) => {
 };
 
 export default errorMiddleware;
+

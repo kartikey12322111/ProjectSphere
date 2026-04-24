@@ -1,4 +1,4 @@
-import ErrorHandler from "../middlewares/error.js";
+import { ErrorHandler } from "../middlewares/error.js";
 import {Project} from "../models/project.js"
 
 export const getProjectByStudent = async (studentId) => {

@@ -1,6 +1,6 @@
 import { Announcement } from "../models/Announcement.js";
 import asyncHandler from "../middlewares/asyncHandler.js";
-import ErrorHandler from "../middlewares/error.js";
+import { ErrorHandler } from "../middlewares/error.js";
 
 // Create Announcement (Admin Only)
 export const createAnnouncement = asyncHandler(async (req, res, next) => {
