@@ -84,6 +84,14 @@ export const updateTeacher = asyncHandler(async (req, res, next)=>{
     const updateData = {...req.body};
     delete updateData.role;
 
+    if (updateData.expertise) {
+        updateData.expertise = Array.isArray(updateData.expertise) 
+            ? updateData.expertise 
+            : typeof updateData.expertise === "string" && updateData.expertise.trim() !== "" 
+            ? updateData.expertise.split(",").map(s => s.trim())
+            : [];
+    }
+
     const user = await userServices.updateUser(id, updateData);
     if(!user){
         return next(new ErrorHandler("Teacher not found",404));
@@ -219,8 +227,8 @@ export const assignSupervisor = asyncHandler(async(req, res, next)=>{
     }
     
     // ✅ Capacity Check
-    if (supervisor.assignedStudents >= supervisor.maxStudents) {
-        return next(new ErrorHandler("Teacher has reached maximum student capacity", 400));
+    if (supervisor.assignedStudents.length > supervisor.maxStudents) {
+        return next(new ErrorHandler("Teacher has exceeded maximum student capacity", 400));
     }
 
     // ✅ Update logic
