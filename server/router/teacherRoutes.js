@@ -1,6 +1,6 @@
 import express from 'express'
 import { isAuthenticated, isAuthorized } from '../middlewares/auth.js';
-import { acceptRequest, addFeedback, getFeedback, downloadFile, getAssignedStudents, getFiles, getRequests, getTeacherDashboardStats, markComplete, rejectRequest } from '../controllers/teacherController.js';
+import { acceptRequest, addFeedback, getFeedback, downloadFile, getAssignedStudents, getFiles, getRequests, getTeacherDashboardStats, markComplete, rejectRequest, getTeacherProfile, updateTeacherProfile, updateMilestone } from '../controllers/teacherController.js';
 
 const router = express.Router();
 
@@ -14,4 +14,7 @@ router.post("/mark-complete/:projectId", isAuthenticated, isAuthorized("Teacher"
 router.get("/assigned-students", isAuthenticated, isAuthorized("Teacher"), getAssignedStudents);
 router.get("/download/:projectId/:fileId", isAuthenticated, isAuthorized("Teacher"), downloadFile);
 router.get("/files", isAuthenticated, isAuthorized("Teacher"), getFiles);
+router.get("/profile", isAuthenticated, isAuthorized("Teacher"), getTeacherProfile);
+router.put("/profile", isAuthenticated, isAuthorized("Teacher"), updateTeacherProfile);
+router.put("/milestone/:projectId/:milestoneId", isAuthenticated, isAuthorized("Teacher"), updateMilestone);
 export default router;

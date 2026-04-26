@@ -287,3 +287,141 @@ export const downloadFile = asyncHandler(async(req, res, next) =>{
 
     fileServices.streamDownload(file.fileUrl, res, file.originalName);
 });
+
+// ─── Update Proposal ─────────────────────────────────────────────────────────
+
+export const updateProposal = asyncHandler(async (req, res, next) => {
+    const studentId = req.user._id;
+    const { title, description, tags } = req.body;
+
+    const project = await projectService.getProjectByStudent(studentId);
+    if (!project) return next(new ErrorHandler("No project found for this student", 404));
+
+    if (project.status !== "pending") {
+        return next(
+            new ErrorHandler(
+                "You can only edit a project that is still pending review",
+                400
+            )
+        );
+    }
+
+    const allowedUpdates = {};
+    if (title !== undefined)       allowedUpdates.title       = title;
+    if (description !== undefined) allowedUpdates.description = description;
+    if (tags !== undefined)        allowedUpdates.tags        = Array.isArray(tags) ? tags : [];
+
+    const updatedProject = await Project.findByIdAndUpdate(
+        project._id,
+        allowedUpdates,
+        { new: true, runValidators: true }
+    ).populate("students", "name email").populate("supervisor", "name email");
+
+    res.status(200).json({
+        success: true,
+        message: "Project proposal updated successfully",
+        data: { project: updatedProject },
+    });
+});
+
+// ─── Delete Uploaded File ───────────────────────────────────────────────────
+
+export const deleteFile = asyncHandler(async (req, res, next) => {
+    const { projectId, fileId } = req.params;
+    const studentId = req.user._id;
+
+    const project = await projectService.getProjectById(projectId);
+    if (!project) return next(new ErrorHandler("Project not found", 404));
+
+    const isMember = project.students.some(
+        (s) => s._id.toString() === studentId.toString()
+    );
+    if (!isMember) return next(new ErrorHandler("Not authorized to delete files from this project", 403));
+
+    const file = project.files.id(fileId);
+    if (!file) return next(new ErrorHandler("File not found", 404));
+
+    project.files.pull(fileId);
+    await project.save();
+
+    res.status(200).json({
+        success: true,
+        message: "File deleted successfully",
+    });
+});
+
+// ─── Withdraw Supervisor Request ──────────────────────────────────────────────
+
+export const withdrawSupervisorRequest = asyncHandler(async (req, res, next) => {
+    const { requestId } = req.params;
+    const studentId = req.user._id;
+
+    const { SupervisorRequest } = await import("../models/supervisorRequest.js");
+    const request = await SupervisorRequest.findById(requestId);
+
+    if (!request) return next(new ErrorHandler("Request not found", 404));
+
+    if (request.student.toString() !== studentId.toString()) {
+        return next(new ErrorHandler("Not authorized to withdraw this request", 403));
+    }
+
+    if (request.status !== "pending") {
+        return next(
+            new ErrorHandler(
+                `Cannot withdraw a request that has already been ${request.status}`,
+                400
+            )
+        );
+    }
+
+    await request.deleteOne();
+
+    res.status(200).json({
+        success: true,
+        message: "Supervisor request withdrawn successfully",
+    });
+});
+
+// ─── Student Profile ─────────────────────────────────────────────────────────
+
+export const getStudentProfile = asyncHandler(async (req, res, next) => {
+    const studentId = req.user._id;
+
+    const student = await User.findById(studentId)
+        .select("-password -resetPasswordToken -resetPasswordExpire")
+        .populate("supervisor", "name email department expertise")
+        .populate("project", "title status groupName")
+        .lean();
+
+    if (!student) return next(new ErrorHandler("Student not found", 404));
+
+    res.status(200).json({
+        success: true,
+        message: "Student profile fetched successfully",
+        data: { student },
+    });
+});
+
+export const updateStudentProfile = asyncHandler(async (req, res, next) => {
+    const studentId = req.user._id;
+    const { name, department, bio, portfolioUrl } = req.body;
+
+    // Students should not change role-sensitive fields
+    const allowedUpdates = {};
+    if (name !== undefined)         allowedUpdates.name         = name;
+    if (department !== undefined)   allowedUpdates.department   = department;
+    if (bio !== undefined)          allowedUpdates.bio          = bio;
+    if (portfolioUrl !== undefined) allowedUpdates.portfolioUrl = portfolioUrl;
+
+    const updatedStudent = await User.findByIdAndUpdate(
+        studentId,
+        allowedUpdates,
+        { new: true, runValidators: true }
+    ).select("-password -resetPasswordToken -resetPasswordExpire");
+
+    res.status(200).json({
+        success: true,
+        message: "Profile updated successfully",
+        data: { student: updatedStudent },
+    });
+});

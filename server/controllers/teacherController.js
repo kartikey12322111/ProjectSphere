@@ -341,3 +341,110 @@ export const downloadFile = asyncHandler(async (req, res, next) => {
   if (!file) return next(new ErrorHandler("File not found", 404));
   fileServices.streamDownload(file.fileUrl, res, file.originalName);
 });
+
+// ─── Teacher Profile ─────────────────────────────────────────────────────────
+
+export const getTeacherProfile = asyncHandler(async (req, res, next) => {
+    const teacherId = req.user._id;
+
+    const teacher = await User.findById(teacherId)
+        .select("-password -resetPasswordToken -resetPasswordExpire")
+        .lean();
+
+    if (!teacher) return next(new ErrorHandler("Teacher not found", 404));
+
+    // Attach live counts for convenience
+    const [totalProjects, pendingRequests] = await Promise.all([
+        Project.countDocuments({ supervisor: teacherId }),
+        (await import("../models/supervisorRequest.js")).SupervisorRequest
+            .countDocuments({ supervisor: teacherId, status: "pending" }),
+    ]);
+
+    res.status(200).json({
+        success: true,
+        message: "Teacher profile fetched successfully",
+        data: {
+            teacher,
+            stats: {
+                totalProjects,
+                pendingRequests,
+                assignedStudents: teacher.assignedStudents?.length ?? 0,
+                maxStudents: teacher.maxStudents,
+            },
+        },
+    });
+});
+
+export const updateTeacherProfile = asyncHandler(async (req, res, next) => {
+    const teacherId = req.user._id;
+    const { name, department, expertise, maxStudents, bio, portfolioUrl } = req.body;
+
+    // Validate maxStudents won't be set below current assignments
+    if (maxStudents !== undefined) {
+        const teacher = await User.findById(teacherId);
+        if (maxStudents < (teacher.assignedStudents?.length ?? 0)) {
+            return next(
+                new ErrorHandler(
+                    `Cannot set max students below your current assigned count (${teacher.assignedStudents.length})`,
+                    400
+                )
+            );
+        }
+    }
+
+    const allowedUpdates = {};
+    if (name !== undefined)         allowedUpdates.name         = name;
+    if (department !== undefined)   allowedUpdates.department   = department;
+    if (expertise !== undefined)    allowedUpdates.expertise    = Array.isArray(expertise) ? expertise : [expertise];
+    if (maxStudents !== undefined)  allowedUpdates.maxStudents  = maxStudents;
+    if (bio !== undefined)          allowedUpdates.bio          = bio;
+    if (portfolioUrl !== undefined) allowedUpdates.portfolioUrl = portfolioUrl;
+
+    const updatedTeacher = await userServices.updateUser(teacherId, allowedUpdates);
+
+    res.status(200).json({
+        success: true,
+        message: "Teacher profile updated successfully",
+        data: { teacher: updatedTeacher },
+    });
+});
+
+// ─── Milestone Management ─────────────────────────────────────────────────────
+
+export const updateMilestone = asyncHandler(async (req, res, next) => {
+    const { projectId, milestoneId } = req.params;
+    const { status } = req.body;
+    const teacherId = req.user._id;
+
+    if (!status || !["pending", "completed"].includes(status)) {
+        return next(new ErrorHandler("Status must be 'pending' or 'completed'", 400));
+    }
+
+    const project = await projectService.getProjectById(projectId);
+    if (!project) return next(new ErrorHandler("Project not found", 404));
+
+    if (project.supervisor._id.toString() !== teacherId.toString()) {
+        return next(new ErrorHandler("Not authorized to update milestones for this project", 403));
+    }
+
+    const milestone = project.milestones.id(milestoneId);
+    if (!milestone) return next(new ErrorHandler("Milestone not found", 404));
+
+    milestone.status = status;
+    milestone.completedAt = status === "completed" ? new Date() : undefined;
+    await project.save();
+
+    await notificationServices.notifyUser(
+        project.students.map(s => s._id || s),
+        `Milestone "${milestone.title}" has been marked as ${status} by your supervisor`,
+        "general",
+        "/student/project",
+        "low"
+    );
+
+    res.status(200).json({
+        success: true,
+        message: `Milestone marked as ${status}`,
+        data: { milestone },
+    });
+});

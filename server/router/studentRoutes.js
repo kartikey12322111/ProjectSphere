@@ -1,7 +1,7 @@
 import express from 'express'
 import multer from 'multer'
 import { isAuthenticated, isAuthorized } from '../middlewares/auth.js';
-import { downloadFile, getAvailableSupervisors, getDashboardStats, getFeedback, getStudentProject, getSupervisor, requestSupervisor, submitProposal, uploadFiles, searchStudents } from '../controllers/studentController.js';
+import { downloadFile, getAvailableSupervisors, getDashboardStats, getFeedback, getStudentProject, getSupervisor, requestSupervisor, submitProposal, uploadFiles, searchStudents, updateProposal, deleteFile, withdrawSupervisorRequest, getStudentProfile, updateStudentProfile } from '../controllers/studentController.js';
 import { handleUploadError, upload } from '../middlewares/upload.js';
 
 const router = express.Router();
@@ -19,6 +19,11 @@ router.get("/feedback/:projectId", isAuthenticated, isAuthorized("Student"), get
 router.get("/fetch-dashboard-stats", isAuthenticated, isAuthorized("Student"), getDashboardStats);
 router.get("/download/:projectId/:fileId", isAuthenticated, isAuthorized("Student"), downloadFile);
 router.get("/search-students", isAuthenticated, isAuthorized("Student"), searchStudents);
+router.put("/project-proposal", isAuthenticated, isAuthorized("Student"), updateProposal);
+router.delete("/file/:projectId/:fileId", isAuthenticated, isAuthorized("Student"), deleteFile);
+router.delete("/request/:requestId", isAuthenticated, isAuthorized("Student"), withdrawSupervisorRequest);
+router.get("/profile", isAuthenticated, isAuthorized("Student"), getStudentProfile);
+router.put("/profile", isAuthenticated, isAuthorized("Student"), updateStudentProfile);
 
 
 export default router;
