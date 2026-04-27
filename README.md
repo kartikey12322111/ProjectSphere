@@ -12,7 +12,7 @@ ProjectSphere is a comprehensive academic project management platform designed t
 - **Notification System**: Stay updated with deadlines and project milestones.
 - **File Management**: Securely upload and manage project documents.
 
-## Tech Stack
+## TECH STACK USED
 
 ### Frontend
 - React 19
