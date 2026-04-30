@@ -1,6 +1,6 @@
 # ProjectSphere
 
-ProjectSphere – A MERN Stack based Final Year Project Management System for managing projects, teams, tasks, and progress.
+ProjectSphere – A MERN Stack based Final Year Project Management System for managing projects, teams, tasks, progress and updates.
 
 ProjectSphere is a comprehensive academic project management platform designed to streamline the project lifecycle for students, teachers, and administrators. It facilitates collaboration, project tracking, and communication within an academic environment.
 
