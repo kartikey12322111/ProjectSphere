@@ -31,6 +31,7 @@ ProjectSphere is a comprehensive academic project management platform designed t
 ## Getting Started
 
 ### Prerequisites
+- React.js
 - Node.js (v18+)
 - MongoDB
 
