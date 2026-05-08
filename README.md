@@ -10,7 +10,6 @@ ProjectSphere is a comprehensive academic project management platform designed t
 - **Project Tracking**: Manage project progress, documentation, and deadlines.
 - **Real-time Chat**: Built-in messaging system for instant communication.
 - **Notification System**: Stay updated with deadlines and project milestones and project features.
-- **File Management**: Securely upload and manage project documents.
 
 ## TECH STACK USED
 
