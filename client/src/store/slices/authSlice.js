@@ -75,6 +75,21 @@ export const logout = createAsyncThunk("/auth/logout",async (_, thunkAPI) => {
     return thunkAPI.rejectWithValue(error.response.data.message || "failed to logout");
   }
 });
+
+export const register = createAsyncThunk("register", async (data, thunkAPI) => {
+  try {
+    const res = await axiosInstance.post("/auth/register", data, {
+      headers: {"Content-Type": "application/json"},
+    });
+    localStorage.setItem("token", res.data.token);
+    toast.success(res.data.message || "Account created successfully!");
+    return res.data.user;
+  } catch (error) {
+    toast.error(error.response?.data?.message || "Failed to create account");
+    return thunkAPI.rejectWithValue(error.response?.data?.message);
+  }
+});
+
 const authSlice = createSlice({
   name: "auth",
   initialState: {
@@ -94,6 +109,14 @@ const authSlice = createSlice({
       state.authUser = action.payload;
     }).addCase(login.rejected, (state) => {
       state.isLoggingIn = false;
+    })
+    .addCase(register.pending, (state) => {
+      state.isSigningUp = true;
+    }).addCase(register.fulfilled, (state, action) => {
+      state.isSigningUp = false;
+      state.authUser = action.payload;
+    }).addCase(register.rejected, (state) => {
+      state.isSigningUp = false;
     })
     .addCase(getUser.pending, (state)=>{
       state.isCheckingAuth = true;

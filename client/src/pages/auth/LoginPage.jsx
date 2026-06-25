@@ -197,8 +197,14 @@ const LoginPage = () => {
               </button>
             </form>
 
-            <div className="mt-8 pt-8 border-t border-slate-100 dark:border-slate-800 text-center">
-              <p className="text-body font-bold">Institutional Access Only</p>
+            <div className="mt-8 pt-8 border-t border-slate-100 dark:border-slate-800">
+              <p className="text-body font-bold text-center mb-4">Institutional Access Only</p>
+              <div className="flex items-center gap-2 justify-center">
+                <span className="text-body">Don't have an account?</span>
+                <Link to="/signup" className="text-blue-600 dark:text-blue-400 font-bold hover:underline">
+                  Create One
+                </Link>
+              </div>
             </div>
           </div>
         </div>

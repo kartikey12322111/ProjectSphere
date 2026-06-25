@@ -8,7 +8,7 @@ const DashboardLayout = ({ userRole }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-background text-foreground pt-[70px] selection:bg-blue-500/30 selection:text-blue-900 transition-colors duration-500">
+    <div className="min-h-screen bg-background text-foreground pt-20 selection:bg-blue-500/30 selection:text-blue-900 transition-colors duration-500">
       {/* Dynamic background accents */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
         <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] rounded-full bg-blue-500/5 blur-[120px] animate-pulse-soft" />
